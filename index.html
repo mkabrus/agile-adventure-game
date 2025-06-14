@@ -67,13 +67,13 @@
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-    <!-- FIX: Added min-h-[500px] to ensure the container has enough height on load to show the start button -->
     <div id="game-container" class="w-full max-w-4xl mx-auto p-4 sm:p-6 md:p-8 rounded-2xl shadow-2xl overflow-hidden relative min-h-[500px]">
 
         <!-- Start Screen -->
         <div id="start-screen" class="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-8">
             <h1 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-4">Agile Adventure</h1>
-            <p class="text-lg text-gray-600 mb-8 max-w-2xl">You are an Agile Coach leading "The Pioneers" on a quest to deliver a great product. Answer the questions correctly to clear the path to success!</p>
+            <h2 class="text-xl font-semibold text-blue-600 mb-4">(Theory & Practice Edition)</h2>
+            <p class="text-lg text-gray-600 mb-8 max-w-2xl">You are an Agile Coach leading "The Pioneers" on a quest to deliver a great product. Answer 10 randomly selected questions to clear the path to success!</p>
             <button id="start-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-xl shadow-lg transition-transform transform hover:scale-105">
                 Start the Adventure
             </button>
@@ -119,7 +119,6 @@
                 <h2 id="modal-title" class="text-3xl font-bold mb-4"></h2>
                 <p id="modal-explanation" class="text-gray-600 mb-6"></p>
                 
-                <!-- Gemini API Feature -->
                 <div id="gemini-coach-container" class="my-6">
                     <button id="gemini-coach-button" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105">
                         ✨ Ask the Agile Coach
@@ -147,19 +146,44 @@
     </div>
 
     <script>
-        const questions = [
-            { question: "According to the Agile Manifesto, what is the PRIMARY measure of progress?", options: ["Comprehensive documentation", "Following the plan", "Working software", "Hours logged"], answer: 2, explanation: "The Agile Manifesto states, 'Working software is the primary measure of progress.' This emphasizes delivering tangible value over just completing tasks or creating extensive documentation." },
-            { question: "What is the main purpose of the Daily Scrum?", options: ["To give a status update to the Scrum Master", "To inspect progress toward the Sprint Goal and adapt", "To plan the entire Sprint", "To discuss new features"], answer: 1, explanation: "The purpose of the Daily Scrum is for the team to inspect its progress toward the Sprint Goal and create a plan for the next 24 hours. It's a planning meeting for the team, not a status report for a manager." },
-            { question: "The Scrum Guide states that a 'self-managing' team internally decides...", options: ["What the Product Goal should be", "Who is on the team", "Who does what, when, and how", "Which stakeholders to listen to"], answer: 2, explanation: "A self-managing team decides 'who does what, when, and how' to accomplish their work within the boundaries of the Sprint Goal. This empowers the team to own their process." },
-            { question: "Which of the following is a common MISTAKE when creating a Sprint Goal?", options: ["Making it a single, focused objective", "Connecting it to the Product Goal", "Making it a to-do list like 'Complete stories 1-8'", "Allowing for flexibility in how to achieve it"], answer: 2, explanation: "A common mistake is turning the Sprint Goal into a to-do list (e.g., 'Complete stories X, Y, and Z'). A strong Sprint Goal is a single, valuable objective that provides focus and flexibility." },
-            { question: "The primary purpose of the Sprint Retrospective is to...", options: ["Blame someone for failures", "Plan ways to increase quality and effectiveness", "Demonstrate the work done", "Socialize with the team"], answer: 1, explanation: "The purpose of the Sprint Retrospective is to 'plan ways to increase quality and effectiveness.' It's a dedicated event for the team to reflect and commit to actionable improvements." },
-            { question: "A powerful 'Definition of Done' creates transparency by providing everyone...", options: ["A list of tasks for each developer", "A shared understanding of what it means for work to be complete", "Approval from the manager", "The date the work was finished"], answer: 1, explanation: "The Definition of Done (DoD) is crucial for transparency. It provides a shared, clear understanding for everyone on what quality work looks like and when an Increment is truly 'Done' and potentially usable." },
-            { question: "The 'Value Delivery Formula' from the document suggests value is a combination of Working Software, Learning, and what else?", options: ["Velocity", "Story Points", "Stakeholder votes", "Relationships"], answer: 3, explanation: "The formula presented is Value = Working Software + Learning + Relationships. This highlights that true value delivery depends not just on the product, but also on continuous learning and strong, collaborative relationships." },
-            { question: "The #NoEstimates movement suggests that instead of estimating, teams should focus on...", options: ["Making work items smaller and more similar in size", "Getting more accurate story point estimates", "Increasing team velocity at all costs", "Long-term planning"], answer: 0, explanation: "The #NoEstimates philosophy advocates for breaking work into small, similarly-sized pieces and then measuring flow (e.g., cycle time). This shifts the focus from debating estimates to delivering value faster." },
-            { question: "A highly mature 'Definition of Done' evolves to focus not just on deployed code, but on...", options: ["Code being checked in", "The number of tests passed", "Realized business value and outcomes", "Getting manager approval"], answer: 2, explanation: "While a basic DoD focuses on technical completion, a mature DoD evolves to include whether the feature is delivering its intended value to users and achieving the desired business outcomes." },
-            { question: "The document suggests that before scaling Agile with a large framework, organizations should first try to...", options: ["Hire more project managers", "Implement more processes and tools", "Descale the organization by simplifying and reducing dependencies", "Create more specialized teams"], answer: 2, explanation: "The text warns against the paradox of scaling. It suggests that instead of adding complex frameworks, organizations should first try to 'descale' by minimizing dependencies and empowering smaller, autonomous teams." }
+        // EXPANDED QUESTION BANK to 30 questions
+        const allQuestions = [
+            // Original 15
+            { question: "A Product Owner is struggling to keep up with stakeholder demands and feels like a bottleneck. The most effective solution according to the Scrum Guide is...", options: ["For the Scrum Master to act as a proxy for the PO", "For the organization to respect the PO's decisions and authority", "To form a committee to help the PO prioritize", "To create a rigid, long-term plan to prevent changes"], answer: 1, explanation: "The Scrum Guide states, 'For Product Owners to succeed, the entire organization must respect their decisions.' The LinkedIn posts highlight that POs often fail when they lack true authority and are treated like proxies." },
+            { question: "A team's Sprint Goal is 'Complete user stories 1-8.' What does this common mistake indicate?", options: ["The team is highly focused on value", "The team is using the Sprint Goal as a to-do list instead of an objective", "The team has a strong understanding of the Product Goal", "The team is correctly following the Scrum Guide"], answer: 1, explanation: "A Sprint Goal should be a single, valuable objective, not a to-do list. The goal 'Enable customers to purchase products seamlessly' allows for flexibility, while 'Complete stories 1-8' is just a task list, as highlighted in the 'Sprint Goal Revolution' post." },
+            { question: "What is the primary purpose of the Daily Scrum?", options: ["To give a detailed status report to the Scrum Master", "To inspect progress toward the Sprint Goal and adapt the plan for the day", "To solve complex technical problems in a group setting", "To re-plan the entire Sprint from scratch"], answer: 1, explanation: "Per the Scrum Guide, the purpose is to 'inspect progress toward the Sprint Goal and adapt the Sprint Backlog as necessary.' It's a 15-minute event for the Developers, not a status meeting." },
+            { question: "The Scrum Guide states a 'self-managing' team decides 'who does what, when, and how.' What common misconception often undermines this?", options: ["That self-management requires more structure and clear boundaries", "That 'self-managing' means the team has no accountability and can do whatever they want", "That the Product Owner assigns all the tasks to the team", "That the Scrum Master must approve the team's plan"], answer: 1, explanation: "The 'Self-Management Misconception' post points out that leaders often think 'self-managing' means 'hands-off,' and teams think it means 'no accountability.' Both are wrong. It requires clear boundaries like the Sprint Goal and DoD." },
+            { question: "The commitment for the Product Backlog is the Product Goal. What is the commitment for the Increment?", options: ["The Sprint Goal", "Velocity", "The Definition of Done", "Stakeholder approval"], answer: 2, explanation: "The Definition of Done is the formal commitment for the Increment. It ensures everyone has a shared understanding of what it means for work to be complete and of releasable quality." },
+            { question: "A team's retrospective consists only of 'What went well, what didn't.' The most crucial missing piece is...", options: ["Making sure every person speaks for five minutes", "Creating a specific and actionable plan for improvement", "Inviting senior management to observe", "Celebrating the things that went well"], answer: 1, explanation: "The Scrum Guide states the purpose is 'to plan ways to increase quality and effectiveness.' The 'Retrospective That Actually Works' post emphasizes that a retrospective fails if it doesn't result in a concrete plan for change." },
+            { question: "According to the 2020 Scrum Guide, who is accountable for the Scrum Team's effectiveness?", options: ["The Product Owner", "The Scrum Master", "The Developers", "A project manager"], answer: 1, explanation: "The Scrum Master is accountable for the Scrum Team's effectiveness. They achieve this by enabling the team to improve its practices within the Scrum framework." },
+            { question: "What is the 'transparency paradox' described in the provided texts?", options: ["That perfect transparency is impossible to achieve", "That sharing too much unrefined information can create chaos instead of clarity", "That stakeholders don't really want transparency", "That transparency is only for the Developers"], answer: 1, explanation: "The 'Transparency Paradox' post argues that 'radical transparency' can lead to information overload. True transparency, enabled by things like a clear Sprint Goal and Definition of Done, creates clarity, not chaos." },
+            { question: "What is the primary risk of having a weak or vague Definition of Done?", options: ["The team might work too slowly", "The Sprint might be cancelled", "The Increment delivered may not be usable or of sufficient quality", "The Scrum Master will have to write more documentation"], answer: 2, explanation: "A weak DoD (e.g., 'code is written') fails to ensure quality. A strong DoD ensures the Increment is truly usable and releasable, preventing technical debt and quality problems, as per the 'Definition of Done Dilemma' post." },
+            { question: "Who has the authority to cancel a Sprint?", options: ["The Developers, if the work is too hard", "The Scrum Master, if the team is not following the rules", "The stakeholders, if they change their minds", "The Product Owner, if the Sprint Goal becomes obsolete"], answer: 3, explanation: "The 2020 Scrum Guide states this clearly: 'Only the Product Owner has the authority to cancel the Sprint.'" },
+            { question: "A Product Backlog is a living artifact. The 'Product Backlog Evolution' post suggests a healthy backlog is one that...", options: ["Has over 200 detailed items planned for the next year", "Never changes once the priorities are set", "Is constantly evolving, with old items being removed and new ones emerging", "Is managed and updated exclusively by the Scrum Master"], answer: 2, explanation: "A static backlog is a sign of trouble. A healthy backlog is 'emergent,' meaning it constantly changes based on learning and feedback. Old, irrelevant items should be pruned." },
+            { question: "What are the five Scrum Values?", options: ["Speed, Quality, Cost, Scope, Risk", "Commitment, Focus, Openness, Respect, and Courage", "Planning, Executing, Inspecting, Adapting, Delivering", "Honesty, Trust, Leadership, Collaboration, and Innovation"], answer: 1, explanation: "The five Scrum Values are Commitment, Focus, Openness, Respect, and Courage. These values are the foundation upon which trust and empiricism are built." },
+            { question: "Your team is 'cross-functional' because it has developers and testers. However, developers only code and testers only test. What is this an example of?", options: ["A truly cross-functional team", "Co-located functional silos", "A self-organizing team", "A mature Scrum team"], answer: 1, explanation: "The 'Cross-Functional Reality Check' post clarifies this. True cross-functionality means the team as a whole has all the skills and collaborates to achieve the Sprint Goal, rather than individuals working in silos within the team." },
+            { question: "The purpose of the Sprint Review is to...", options: ["Get formal sign-off on the work completed", "Inspect the outcome of the Sprint and determine future adaptations", "Give a status update to senior leadership", "Hold the team accountable for velocity metrics"], answer: 1, explanation: "The Sprint Review is a working session to 'inspect the outcome of the Sprint and determine future adaptations' with stakeholders. It's a collaboration and feedback event, not just a demo or sign-off meeting." },
+            { question: "An organization is struggling with its Agile transformation. According to the 'Agile Transformation Trap', they are likely focusing on...", options: ["Individuals and interactions over processes and tools", "Processes and tools over individuals and interactions", "Hiring more Scrum Masters", "Reducing the number of meetings"], answer: 1, explanation: "The trap is focusing on the right side of the Agile Manifesto values (processes, tools, documentation) instead of the left side (individuals, interactions, working software). An Agile transformation is a mindset shift first." },
+            
+            // New 15
+            { question: "A manager wants to compare Team A's velocity (30 points) with Team B's (45 points) to measure productivity. What is the most accurate response?", options: ["Team B is 50% more productive than Team A.", "This is a good way to measure performance.", "Velocity is a team-specific metric for forecasting and cannot be used to compare teams.", "Ask Team A to increase their velocity to 45 points."], answer: 2, explanation: "The 'Velocity Trap' post highlights that velocity measures effort, not value, and is team-specific. Using it to compare teams is a common anti-pattern that leads to undesirable behavior." },
+            { question: "A team is working without overtime but a manager says they aren't being 'challenged'. A sustainable pace means...", options: ["A comfortable pace where the team is never stressed.", "A constant pace that can be maintained indefinitely while managing quality.", "Working at maximum capacity, including overtime.", "Lowering the Sprint commitment to reduce pressure."], answer: 1, explanation: "Sustainable pace, per the Agile Manifesto, is about maintaining a constant, indefinite pace. This is enabled by good practices like managing technical debt and clear goals, not just avoiding hard work." },
+            { question: "The team repeatedly reports 'waiting for stakeholder approval' as an impediment. A good Scrum Master should...", options: ["Tell the team to wait patiently.", "Log the impediment and report it to management.", "Investigate the root cause, such as a lack of trust or unclear decision-making authority.", "Immediately escalate the issue to the stakeholder's manager."], answer: 2, explanation: "Surface-level impediments often hide deeper, systemic issues. A Scrum Master's job is to 'cause the removal' by digging deeper to find the root cause, like a lack of trust or centralized control." },
+            { question: "To shorten feedback loops and accelerate learning, a team should prioritize...", options: ["Holding longer Sprint Retrospectives.", "Writing more comprehensive documentation.", "Getting feedback from real users on working software as frequently as possible.", "Waiting until the project's end for a single, major review."], answer: 2, explanation: "The 'Feedback Loop Revolution' post emphasizes that the goal is to reduce the time it takes to get real feedback. The most valuable feedback comes from customers using working software." },
+            { question: "The Product Owner is hesitant to address technical debt. The best way for Developers to get buy-in is to...", options: ["Refuse to work on new features.", "Translate the technical debt into its business impact, such as slower delivery.", "Work on the technical debt secretly without telling the PO.", "Insist that technical debt is a development problem only."], answer: 1, explanation: "The 'Technical Debt Time Bomb' post argues that tech debt is a business problem. To get buy-in, Developers must frame it in terms of business impact, like how it slows down future feature delivery." },
+            { question: "The three pillars of empiricism, upon which Scrum is founded, are:", options: ["Planning, Execution, and Delivery.", "Transparency, Inspection, and Adaptation.", "Communication, Collaboration, and Celebration.", "Product Owner, Scrum Master, and Developers."], answer: 1, explanation: "The 2020 Scrum Guide explicitly states, 'Scrum is founded on empiricism... These events work because they implement the empirical Scrum pillars of transparency, inspection, and adaptation.'" },
+            { question: "Sprint Planning now begins with a key topic according to the 2020 Scrum Guide. What is it?", options: ["Topic One: How will the work get done?", "Topic One: What can be Done this Sprint?", "Topic One: Why is this Sprint valuable?", "Topic One: Who is available to work?"], answer: 2, explanation: "Sprint Planning now starts with the 'Why', where the team collaborates to define a Sprint Goal. This provides purpose before diving into the 'What' (selecting items) and the 'How' (the plan)." },
+            { question: "The Product Goal is best described as...", options: ["A detailed list of all features for the next release.", "A long-term objective for the Scrum Team describing a future state of the product.", "A contract with stakeholders that cannot be changed.", "The same thing as the Sprint Goal."], answer: 1, explanation: "The Scrum Guide defines the Product Goal as a 'future state of the product which can serve as a target for the Scrum Team to plan against.' It is a long-term objective." },
+            { question: "A sign that a Scrum Master is evolving to serve the wider organization is when they...", options: ["Become an expert at facilitating all the team's meetings.", "Focus on addressing systemic impediments and coaching leadership on agility.", "Know the status of every single task in the Sprint Backlog.", "Create all the user stories for the team."], answer: 1, explanation: "The 'Scrum Master Evolution' post shows a maturity model where advanced Scrum Masters move from team-level coaching to tackling organizational impediments and coaching leadership." },
+            { question: "A team has a very strict 'Definition of Ready' checklist. This common pattern can lead to...", options: ["Higher quality work.", "Faster delivery.", "A rigid backlog and resistance to change, hindering agility.", "Better collaboration with the Product Owner."], answer: 2, explanation: "While not a formal part of Scrum, a rigid 'DoR' is a common pattern that can undermine the Agile value of 'welcoming changing requirements' by creating gates and resisting flexibility." },
+            { question: "A key goal of the Sprint Review is to foster collaboration. A poor way to do this is to...", options: ["Treat it as a working session to discuss what to do next.", "Adjust the Product Backlog based on feedback.", "Limit it to a one-way presentation with no discussion.", "Discuss progress toward the Product Goal with stakeholders."], answer: 2, explanation: "The Sprint Review should be a working session for collaboration, not a one-way presentation. Its purpose is to inspect the outcome and adapt." },
+            { question: "Who is accountable for creating a valuable, useful Increment every Sprint?", options: ["The Developers.", "The Product Owner.", "The Scrum Master.", "The entire Scrum Team."], answer: 3, explanation: "The 2020 Scrum Guide states, 'The entire Scrum Team is accountable for creating a valuable, useful Increment every Sprint.' It is a collective accountability." },
+            { question: "The Product Owner is accountable for effective Product Backlog management. This includes...", options: ["Writing code for the most important items.", "Forcing the Developers to accept a certain number of items.", "Developing the Product Goal and ordering Product Backlog items.", "Facilitating the Daily Scrum."], answer: 2, explanation: "The Scrum Guide lists the PO's accountabilities, which include developing and communicating the Product Goal, creating and communicating PBIs, and ordering those items to maximize value." },
+            { question: "What is the timebox for Sprint Planning for a one-month Sprint?", options: ["Maximum of four hours.", "Maximum of eight hours.", "As long as it takes.", "Exactly two hours."], answer: 1, explanation: "The Scrum Guide specifies the timeboxes for all events. For a one-month Sprint, Sprint Planning is timeboxed to a maximum of eight hours." },
+            { question: "Can a Scrum Team deliver an Increment to stakeholders before the Sprint Review?", options: ["No, all work must be held until the Sprint Review.", "Yes, the Sprint Review should never be a gate to releasing value.", "Only if the Scrum Master gives permission.", "Only if the Sprint is cancelled."], answer: 1, explanation: "The Scrum Guide explicitly states, 'an Increment may be delivered to stakeholders prior to the end of the Sprint. The Sprint Review should never be considered a gate to releasing value.'" }
         ];
 
+        let currentQuestions = [];
         let currentQuestionIndex = 0;
         let score = 0;
 
@@ -185,9 +209,23 @@
         const geminiLoading = document.getElementById('gemini-loading');
         const geminiResponseContainer = document.getElementById('gemini-response-container');
         
+        // Function to shuffle an array (Fisher-Yates shuffle)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
         function initializeGame() {
+            // Shuffle the main question bank
+            shuffleArray(allQuestions);
+            // Select the first 10 questions for this game session
+            currentQuestions = allQuestions.slice(0, 10);
+            
             currentQuestionIndex = 0;
             score = 0;
+
             startScreen.style.display = 'flex';
             gameUI.style.display = 'none';
             endScreen.style.display = 'none';
@@ -206,7 +244,7 @@
         
         function createPath() {
             pathContainer.innerHTML = '';
-            for (let i = 0; i < questions.length; i++) {
+            for (let i = 0; i < currentQuestions.length; i++) {
                 const step = document.createElement('div');
                 step.classList.add('path-step', 'w-3', 'h-3', 'bg-gray-400', 'rounded-full');
                 step.id = `step-${i}`;
@@ -215,13 +253,13 @@
         }
 
         function displayQuestion() {
-            if (currentQuestionIndex >= questions.length) {
+            if (currentQuestionIndex >= currentQuestions.length) {
                 showEndScreen();
                 return;
             }
             resetGeminiCoach();
-            const currentQuestion = questions[currentQuestionIndex];
-            questionNumberEl.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+            const currentQuestion = currentQuestions[currentQuestionIndex];
+            questionNumberEl.textContent = `Question ${currentQuestionIndex + 1} of ${currentQuestions.length}`;
             questionTextEl.textContent = currentQuestion.question;
             optionsContainer.innerHTML = '';
             currentQuestion.options.forEach((option, index) => {
@@ -236,7 +274,7 @@
         }
 
         function selectAnswer(selectedIndex) {
-            const currentQuestion = questions[currentQuestionIndex];
+            const currentQuestion = currentQuestions[currentQuestionIndex];
             const isCorrect = selectedIndex === currentQuestion.answer;
             const buttons = optionsContainer.querySelectorAll('button');
             buttons.forEach(button => button.disabled = true);
@@ -272,8 +310,8 @@
             geminiCoachButton.style.display = 'none';
             geminiLoading.style.display = 'flex';
             
-            const currentQuestion = questions[currentQuestionIndex];
-            const prompt = `As an expert Agile Coach, explain the concept behind this question in a helpful, encouraging tone. Provide a short, real-world scenario to illustrate the point.
+            const currentQuestion = currentQuestions[currentQuestionIndex];
+            const prompt = `As an expert Agile Coach, explain the concept behind this question in a helpful, encouraging tone. Provide a short, real-world scenario to illustrate the point, referencing both the 2020 Scrum Guide and common real-world challenges.
             
             Question: "${currentQuestion.question}"
             
@@ -328,7 +366,7 @@
         }
 
         function updateCharacterPosition() {
-             const progressPercentage = (currentQuestionIndex / questions.length) * 100;
+             const progressPercentage = (currentQuestionIndex / currentQuestions.length) * 100;
              const adjustedPercentage = Math.min(progressPercentage, 95);
              character.style.left = `${adjustedPercentage}%`;
         }
@@ -344,9 +382,9 @@
             gameUI.style.display = 'none';
             const finalScoreEl = document.getElementById('final-score');
             const endMessageEl = document.getElementById('end-message');
-            finalScoreEl.textContent = `Your Final Score: ${score} out of ${questions.length}`;
+            finalScoreEl.textContent = `Your Final Score: ${score} out of ${currentQuestions.length}`;
             let message = "";
-            if (score === questions.length) message = "Perfect score! You're a true Agile visionary. The Pioneers have shipped an amazing product thanks to you!";
+            if (score === currentQuestions.length) message = "Perfect score! You're a true Agile visionary. The Pioneers have shipped an amazing product thanks to you!";
             else if (score >= 7) message = "Excellent work! You've successfully guided The Pioneers through the challenges. Your Agile knowledge is strong!";
             else if (score >= 4) message = "Good effort! You've learned a lot on this adventure. Keep refining your Agile skills!";
             else message = "The adventure was tough, but every challenge is a learning opportunity. Try again to lead The Pioneers to success!";
